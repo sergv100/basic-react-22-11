@@ -1,12 +1,14 @@
 import React from 'react'
 import CommentList from './comment-list'
+import Button from './button'
 
 function Article(props) {
   const { article, isOpen, toggleOpen } = props
+  let title = isOpen ? 'close' : 'open'
   return (
     <div>
       <h3>{article.title}</h3>
-      <button onClick={toggleOpen}>{isOpen ? 'close' : 'open'}</button>
+      <Button title={title} clickHandler={toggleOpen} />
       {getBody(props)}
     </div>
   )
