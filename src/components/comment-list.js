@@ -6,7 +6,6 @@ import dropdown from '../decorators/dropdown'
 class CommentList extends Component {
   render() {
     const { isOpen } = this.props
-    console.log(isOpen)
     if (!isOpen) return null
 
     return <ul>{this.commentItems()}</ul>
