@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
 import Comment from './comment'
+import Button from './button'
+import dropdown from '../decorators/dropdown'
 
 class CommentList extends Component {
   render() {
+    const { isOpen } = this.props
+    console.log(isOpen)
+    if (!isOpen) return null
+
     return <ul>{this.commentItems()}</ul>
   }
 
@@ -16,4 +22,4 @@ class CommentList extends Component {
   }
 }
 
-export default CommentList
+export default dropdown(CommentList)
