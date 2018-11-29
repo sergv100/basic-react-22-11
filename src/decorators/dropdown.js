@@ -11,11 +11,9 @@ export default (WrappedComponent) =>
 
     render() {
       const { isOpen } = this.state
-      let title = !isOpen ? 'show comments' : 'hide comments'
       return (
         <div>
-          <WrappedComponent isOpen={isOpen} {...this.props} />
-          <Button title={title} clickHandler={this.toggleDropDown} />
+          <WrappedComponent isOpen={isOpen} toggleDropDown={this.toggleDropDown} {...this.props} />
         </div>
       )
     }
