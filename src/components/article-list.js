@@ -11,27 +11,8 @@ export class ArticleList extends Component {
     toggleOpenItem: PropTypes.func.isRequired
   }
 
-  setListRef = (ref) => {
-    this.list = ref
-  }
-
-  state = {
-    error: null
-  }
-
-  componentDidCatch(error) {
-    this.setState({ error })
-  }
-
-  componentDidMount() {
-    const { fetchAllArticles } = this.props
-
-    fetchAllArticles && fetchAllArticles()
-  }
-
   render() {
-    if (this.state.error) return <h3>Error</h3>
-    return <ul ref={this.setListRef}>{this.articleItems()}</ul>
+    return <ul>{this.articleItems()}</ul>
   }
 
   articleItems() {

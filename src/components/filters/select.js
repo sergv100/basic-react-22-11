@@ -1,15 +1,25 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
+import { connect } from 'react-redux'
+import { sortByTitle } from '../../ac'
 
 class SelectFilter extends Component {
   state = {
-    selected: null
+    selected: []
   }
 
-  handleChange = (selected) => this.setState({ selected })
+  handleChange = (selected) => {
+    const { sortByTitle } = this.props
+    this.setState({ selected })
+    selected.forEach((article) => {
+      sortByTitle(article.value)
+    })
+    console.log(selected)
+  }
 
   get options() {
-    return this.props.articles.map((article) => ({
+    const { articles } = this.props
+    return articles.map((article) => ({
       label: article.title,
       value: article.id
     }))
@@ -27,4 +37,7 @@ class SelectFilter extends Component {
   }
 }
 
-export default SelectFilter
+export default connect(
+  null,
+  { sortByTitle }
+)(SelectFilter)
