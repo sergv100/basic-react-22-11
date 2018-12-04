@@ -1,31 +1,58 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Comment from './comment'
-import Button from './button'
-import dropdown from '../decorators/dropdown'
+import toggleOpen from '../decorators/toggleOpen'
 
 class CommentList extends Component {
-  render() {
-    const { isOpen, toggleDropDown } = this.props
-    let title = !isOpen ? 'show comments' : 'hide comments'
-    if (!isOpen) return <Button title={title} clickHandler={toggleDropDown} />
+  static propTypes = {
+    comments: PropTypes.array,
+    isOpen: PropTypes.bool,
+    toggleOpen: PropTypes.func
+  }
 
+  /*
+  static defaultProps = {
+    comments: [],
+  }
+
+*/
+  render() {
+    const { isOpen, toggleOpen } = this.props
+    const text = isOpen ? 'hide comments' : 'show comments'
     return (
       <div>
-        <ul>{this.commentItems()}</ul>
-        <Button title={title} clickHandler={toggleDropDown} />
+        <button onClick={toggleOpen} className="test__comment-list--btn">
+          {text}
+        </button>
+        {this.getBody()}
       </div>
     )
   }
 
-  commentItems() {
-    const { comments } = this.props
-    if (!comments) return null
-    return comments.map((comment) => (
-      <li key={comment.id}>
-        <Comment comment={comment} />
-      </li>
-    ))
+  getBody() {
+    const { comments = [], isOpen } = this.props
+    if (!isOpen) return null
+
+    const body = comments.length ? (
+      <ul className="test__comment-list--body">
+        {comments.map((comment) => (
+          <li key={comment.id} className="test__comment-list--item">
+            <Comment comment={comment} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <h3 className="test__comment-list--empty">No comments yet</h3>
+    )
+
+    return <div>{body}</div>
   }
 }
 
-export default dropdown(CommentList)
+/*
+CommentList.propTypes = {
+
+}
+*/
+
+export default toggleOpen(CommentList)

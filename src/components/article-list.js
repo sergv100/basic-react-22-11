@@ -1,21 +1,43 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import Article from './article'
 import accordion from '../decorators/accordion'
 
-class ArticleList extends Component {
+export class ArticleList extends Component {
+  static propTypes = {
+    articles: PropTypes.array.isRequired,
+    openItemId: PropTypes.string,
+    toggleOpenItem: PropTypes.func.isRequired
+  }
+
   setListRef = (ref) => {
     this.list = ref
-    console.log('---', 'list: ', ref)
+  }
+
+  state = {
+    error: null
+  }
+
+  componentDidCatch(error) {
+    this.setState({ error })
+  }
+
+  componentDidMount() {
+    const { fetchAllArticles } = this.props
+
+    fetchAllArticles && fetchAllArticles()
   }
 
   render() {
+    if (this.state.error) return <h3>Error</h3>
     return <ul ref={this.setListRef}>{this.articleItems()}</ul>
   }
 
   articleItems() {
     const { articles, openItemId, toggleOpenItem } = this.props
     return articles.map((article) => (
-      <li key={article.id}>
+      <li key={article.id} className="test__article-list--item">
         <Article
           article={article}
           isOpen={openItemId === article.id}
@@ -26,4 +48,6 @@ class ArticleList extends Component {
   }
 }
 
-export default accordion(ArticleList)
+export default connect((state) => ({
+  articles: state.articles
+}))(accordion(ArticleList))
