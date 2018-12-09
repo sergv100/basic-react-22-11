@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import CommentList from '../comment-list'
+
 import { connect } from 'react-redux'
 import { deleteArticle } from '../../ac'
 

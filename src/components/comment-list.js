@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import CommentForm from './comment-form'
 import Comment from './comment'
 import toggleOpen from '../decorators/toggleOpen'
 
@@ -10,12 +11,6 @@ class CommentList extends Component {
     toggleOpen: PropTypes.func
   }
 
-  /*
-  static defaultProps = {
-    comments: [],
-  }
-
-*/
   render() {
     const { isOpen, toggleOpen } = this.props
     const text = isOpen ? 'hide comments' : 'show comments'
@@ -45,7 +40,12 @@ class CommentList extends Component {
       <h3 className="test__comment-list--empty">No comments yet</h3>
     )
 
-    return <div>{body}</div>
+    return (
+      <div>
+        {body}
+        <CommentForm />
+      </div>
+    )
   }
 }
 
