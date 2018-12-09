@@ -1,13 +1,22 @@
 import { normalizedArticles } from '../fixtures'
 import { DELETE_ARTICLE } from '../constants'
 
-export default (articlesState = normalizedArticles, action) => {
+const defaultArticles = normalizedArticles.reduce(
+  (acc, article) => ({
+    ...acc,
+    [article.id]: article
+  }),
+  {}
+)
+
+export default (articlesState = defaultArticles, action) => {
   const { type, payload } = action
 
   switch (type) {
     case DELETE_ARTICLE:
-      return articlesState.filter((article) => article.id !== payload.id)
-
+      let articles = articlesState
+      delete articles[payload.id]
+      return articles
     default:
       return articlesState
   }

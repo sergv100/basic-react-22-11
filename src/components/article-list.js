@@ -11,11 +11,6 @@ export class ArticleList extends Component {
     openItemId: PropTypes.string,
     toggleOpenItem: PropTypes.func.isRequired
   }
-
-  setListRef = (ref) => {
-    this.list = ref
-  }
-
   state = {
     error: null
   }
@@ -24,16 +19,10 @@ export class ArticleList extends Component {
     this.setState({ error })
   }
 
-  componentDidMount() {
-    const { fetchAllArticles } = this.props
-
-    fetchAllArticles && fetchAllArticles()
-  }
-
   render() {
     console.log('---', 'render article list')
     if (this.state.error) return <h3>Error</h3>
-    return <ul ref={this.setListRef}>{this.articleItems()}</ul>
+    return <ul>{this.articleItems()}</ul>
   }
 
   articleItems() {
