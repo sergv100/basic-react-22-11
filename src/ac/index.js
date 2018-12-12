@@ -63,7 +63,8 @@ export function loadAllCommentsByArticleId(articleId) {
 
     fetch(`/api/comment?article=${articleId}`)
       .then((res) => res.json())
-      .then((res) =>
+      .then((res) => {
+        console.log(res, articleId)
         dispatch({
           type: LOAD_ALL_COMMENTS + SUCCESS,
           payload: { articleId }
@@ -74,19 +75,9 @@ export function loadAllCommentsByArticleId(articleId) {
             error
           })
         )
-      )
+      })
   }
 }
-
-/*
-export function loadArticleById(id) {
-  return {
-    type: LOAD_ARTICLE,
-    payload: { id },
-    callAPI: `/api/article/${id}`
-  }
-}
-*/
 
 export function loadArticleById(id) {
   return (dispatch) => {

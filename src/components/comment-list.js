@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Comment from './comment'
 import CommentForm from './comment-form'
 import toggleOpen from '../decorators/toggleOpen'
+import { commentsLoadingSelector, createCommentSelector } from '../selectors'
+import { loadAllCommentsByArticleId } from '../ac'
+import Loader from './common/loader'
 
 class CommentList extends Component {
   static propTypes = {
@@ -11,15 +15,21 @@ class CommentList extends Component {
     toggleOpen: PropTypes.func
   }
 
-  /*
-  static defaultProps = {
-    comments: [],
+  componentDidUpdate(prevProps) {
+    const { fetchAllComments, article, isOpen } = this.props
+    return (
+      isOpen &&
+      !!article.comments.length &&
+      !prevProps.isOpen &&
+      fetchAllComments &&
+      fetchAllComments(article.id)
+    )
   }
 
-*/
   render() {
-    const { isOpen, toggleOpen } = this.props
+    const { isOpen, toggleOpen, loading } = this.props
     const text = isOpen ? 'hide comments' : 'show comments'
+    if (loading) return <Loader />
     return (
       <div>
         <button onClick={toggleOpen} className="test__comment-list--btn">
@@ -31,15 +41,12 @@ class CommentList extends Component {
   }
 
   getBody() {
-    const {
-      article: { id, comments = [] },
-      isOpen
-    } = this.props
+    const { article, isOpen } = this.props
     if (!isOpen) return null
 
-    const body = comments.length ? (
+    const body = article.comments.length ? (
       <ul className="test__comment-list--body">
-        {comments.map((id) => (
+        {article.comments.map((id) => (
           <li key={id} className="test__comment-list--item">
             <Comment id={id} />
           </li>
@@ -52,16 +59,18 @@ class CommentList extends Component {
     return (
       <div>
         {body}
-        <CommentForm articleId={id} />
+        <CommentForm articleId={article.id} />
       </div>
     )
   }
 }
 
-/*
-CommentList.propTypes = {
-
-}
-*/
-
-export default toggleOpen(CommentList)
+export default connect(
+  (state) => {
+    return {
+      comments: createCommentSelector(state),
+      loading: commentsLoadingSelector(state)
+    }
+  },
+  { fetchAllComments: loadAllCommentsByArticleId }
+)(toggleOpen(CommentList))

@@ -17,14 +17,15 @@ const ReducerRecord = Record({
 })
 
 export default (commentsState = new ReducerRecord(), action) => {
-  const { type, payload, randomId, response } = action
+  const { type, payload, randomId, res } = action
 
   switch (type) {
     case LOAD_ALL_COMMENTS + START:
       return commentsState.set('loading', true)
 
     case LOAD_ALL_COMMENTS + SUCCESS:
-      return commentsState.set('entities', arrToMap(response, CommentRecord)).set('loading', false)
+      console.log(res, action)
+      return commentsState.set('entities', arrToMap(res, CommentRecord)).set('loading', false)
 
     case ADD_COMMENT:
       return commentsState.set(randomId, {
