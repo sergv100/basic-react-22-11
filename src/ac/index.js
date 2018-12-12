@@ -4,6 +4,7 @@ import {
   CHANGE_DATE_RANGE,
   CHANGE_SELECTION,
   ADD_COMMENT,
+  LOAD_ALL_COMMENTS,
   LOAD_ALL_ARTICLES,
   LOAD_ARTICLE,
   START,
@@ -50,6 +51,30 @@ export function loadAllArticles() {
   return {
     type: LOAD_ALL_ARTICLES,
     callAPI: '/api/article' // { method: 'POST', url: '...'}
+  }
+}
+
+export function loadAllCommentsByArticleId(articleId) {
+  return (dispatch) => {
+    dispatch({
+      type: LOAD_ALL_COMMENTS + START,
+      payload: { articleId }
+    })
+
+    fetch(`/api/comment?article=${articleId}`)
+      .then((res) => res.json())
+      .then((res) =>
+        dispatch({
+          type: LOAD_ALL_COMMENTS + SUCCESS,
+          payload: { articleId }
+        }).catch((error) =>
+          dispatch({
+            type: LOAD_ALL_COMMENTS + FAIL,
+            payload: { articleId },
+            error
+          })
+        )
+      )
   }
 }
 
